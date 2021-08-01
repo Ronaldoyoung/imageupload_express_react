@@ -27,14 +27,14 @@ const UploadForm = () => {
     formData.append("image", file);
 
     try {
-      const res = await axios.post("/upload", formData, {
+      const res = await axios.post("/images", formData, {
         headers: { "Content-Type": "multipart/form-data"},
         onUploadProgress: (e) => {
           setPercent(Math.round(100 *  e.loaded/e.total));
         }
       });
       console.log({ res })
-      toast.success("이미지 업로드 성공!")
+      toast.success("이미지 업로드 성공!!!")
       setTimeout(() => {
         setPercent(0);
         setFileName(defaultFileName);
