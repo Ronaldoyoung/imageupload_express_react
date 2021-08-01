@@ -4,6 +4,7 @@ const multer = require('multer');
 const { v4: uuid }  = require('uuid');
 const mime = require('mime-types');
 const mongoose = require('mongoose');
+const Image = require("./models/images");
 
 console.log('uuid: ', uuid());
 
@@ -35,8 +36,8 @@ mongoose.connect(
   console.log("MongoDB Connect")
   app.use("/uploads", express.static("uploads"));
 
-  app.post('/upload', upload.single("image"), (req, res) => {  
-    // return res.status(500).json({ error: "server failure" })
+  app.post('/upload', upload.single("image"), async (req, res) => {  
+    await new Image({ key: req.file.filename, originalFileName: req.file.originalname }).save();
     res.json(req.file);
   });
 
