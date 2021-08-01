@@ -2,6 +2,7 @@ const express = require('express');
 const multer = require('multer');
 const { v4: uuid }  = require('uuid');
 const mime = require('mime-types');
+const mongoose = require('mongoose');
 
 console.log('uuid: ', uuid());
 
@@ -22,12 +23,24 @@ const upload = multer({ storage, fileFilter: (req, file, cb) => {
 const app = express();
 const PORT = 5000;
 
-app.use("/uploads", express.static("uploads"));
 
+mongoose.connect(
+  "mongodb+srv://admin:x2YkZ3eBmo28EAnF@cluster0.ggwpw.mongodb.net/myFirstDatabase?retryWrites=true&w=majority", {
+    useCreateIndex: true,
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  }
+)
+.then(() => {
+  console.log("MongoDB Connect")
+  app.use("/uploads", express.static("uploads"));
 
-app.post('/upload', upload.single("image"), (req, res) => {  
-  // return res.status(500).json({ error: "server failure" })
-  res.json(req.file);
-});
+  app.post('/upload', upload.single("image"), (req, res) => {  
+    // return res.status(500).json({ error: "server failure" })
+    res.json(req.file);
+  });
 
-app.listen(PORT, () => console.log("Express server listening on PORT " + PORT));
+  app.listen(PORT, () => console.log("Express server listening on PORT " + PORT));
+
+})
+.catch(err => console.log(err))
