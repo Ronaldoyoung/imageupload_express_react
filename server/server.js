@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require('express');
 const multer = require('multer');
 const { v4: uuid }  = require('uuid');
@@ -23,9 +24,8 @@ const upload = multer({ storage, fileFilter: (req, file, cb) => {
 const app = express();
 const PORT = 5000;
 
-
 mongoose.connect(
-  "mongodb+srv://admin:x2YkZ3eBmo28EAnF@cluster0.ggwpw.mongodb.net/myFirstDatabase?retryWrites=true&w=majority", {
+    process.env.MONGO_URI , {
     useCreateIndex: true,
     useNewUrlParser: true,
     useUnifiedTopology: true,
