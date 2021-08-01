@@ -25,8 +25,8 @@ const PORT = 5000;
 app.use("/uploads", express.static("uploads"));
 
 
-app.post('/upload', upload.single("image"), (req, res) => {
-  console.log(req.file)    
+app.post('/upload', upload.single("image"), (req, res) => {  
+  // return res.status(500).json({ error: "server failure" })
   res.json(req.file);
 });
 
