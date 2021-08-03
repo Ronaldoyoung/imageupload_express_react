@@ -5,6 +5,9 @@ const ImageList = () => {
   const [images, setImages] = useState([]);
 
   useEffect(() => {
+
+
+
     axios
     .get("/images")
     .then(result => setImages(result.data))
@@ -12,7 +15,10 @@ const ImageList = () => {
   }, [])
 
   const imgList = images.map(image => (
-    <img style={{width: "100%"}} src={`http://localhost:5000/uploads/${image.key}`} />
+    <img 
+      key={image.key}
+      style={{width: "100%"}} src={`http://localhost:5000/uploads/${image.key}`} 
+    />
   ));
   console.log({ images });
 
