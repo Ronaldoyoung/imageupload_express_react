@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
+import {ImageContext} from '../context/ImageContext'
 
-const ImageList = ({ images }) => {  
+const ImageList = () => {  
+  const [images] = useContext(ImageContext);
 
   const imgList = images.map(image => (
     <img 
