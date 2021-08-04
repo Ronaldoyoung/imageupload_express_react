@@ -3,7 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const { imageRouter } = require("./routes/imageRouter");
 const { userRouter } = require("./routes/userRouter");
-
+const { authenticate } = require("./middleware/authentication");
 
 const app = express();
 
@@ -20,9 +20,9 @@ mongoose.connect(
   console.log("MongoDB Connect")
   app.use("/uploads", express.static("uploads"));
   app.use(express.json());
+  app.use(authenticate);
   app.use("/images", imageRouter);
   app.use("/users", userRouter);
-
   app.listen(PORT, () => console.log("Express server listening on PORT " + PORT));
 
 })
