@@ -24,9 +24,9 @@ const LoginPage = () => {
       });
       history.push("/");
       toast.success("로그인 성공!");
-    } catch (err) {
-      console.error(err);
-      toast.error(err.message);
+    } catch (err) {      
+      console.error(err.response);
+      toast.error(err.response.data.message);
     }    
   }
 
