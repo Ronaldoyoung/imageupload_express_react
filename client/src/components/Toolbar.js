@@ -18,15 +18,13 @@ const Toolbar = () => {
       toast.error(err.message);
     }
   }
-  
-  console.log("me ~~~ :" , me.sessionId);
 
   return (
     <div>
       <Link to="/">
         <span>홈</span>
       </Link>      
-      {me.sessionId
+      {me
         ? (
         <span onClick={logoutHandler} style={{ float: "right" }}>
           로그아웃({me.name})
