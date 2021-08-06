@@ -1,13 +1,15 @@
-import React, { useEffect, useState} from "react";
+import React, { useContext, useEffect, useState} from "react";
 import CustomInput from "../components/CustomInput";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { AuthContext } from "../context/AuthContext";
 
 const RegisterPage = () => {
   const [name, setName] = useState("");  
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [passwordCheck, setPasswordCheck] = useState("");
+  const [me, setMe] = useContext(AuthContext);
 
   const submitHandler = async e => {
     try {
@@ -17,12 +19,16 @@ const RegisterPage = () => {
       if(password !== passwordCheck) throw new Error("비밀번호가 다릅니다. 확인해 주세요.");
 
       const result = await axios.post("/users/register", { name, username, password});
-      console.log("result : ", result);
+      // console.log("result : ", result);
+      setMe({
+        userId: result.data.userId, 
+        sessionId:result.data.sessionId,
+        name:result.data.name,
+      })
       toast.success("회원 가입 성공!");
     } catch (err) {
       toast.error(err.message);
-    }
-    
+    }    
   }
 
   return (
