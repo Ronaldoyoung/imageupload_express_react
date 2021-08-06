@@ -1,18 +1,34 @@
 import React, {useContext} from 'react';
 import { Link } from "react-router-dom";
 import { AuthContext } from '../context/AuthContext';
+import axios from "axios";
+import { toast } from 'react-toastify';
 
 const Toolbar = () => {
   const [me, setMe] = useContext(AuthContext);
+
+  const logoutHandler = async () => {
+    try {
+      console.log({me})
+      await axios.patch(
+        "/users/logout");
+      toast.success("로그아웃!!");
+    } catch (err) {
+      console.error(err);
+      toast.error(err.message);
+    }
+  }
+  
+  console.log("me ~~~ :" , me.sessionId);
 
   return (
     <div>
       <Link to="/">
         <span>홈</span>
       </Link>      
-      {me 
+      {me.sessionId
         ? (
-        <span style={{ float: "right" }}>로그아웃</span>
+        <span onClick={logoutHandler} style={{ float: "right" }}>로그아웃</span>
       ) : (
         <>
           <Link to="/auth/login">
