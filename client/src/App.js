@@ -5,12 +5,14 @@ import MainPage from "./pages/MainPage";
 import RegisterPage from './pages/RegisterPage';
 import LoginPage from "./pages/LoginPage";
 import { Switch, Route } from "react-router-dom";
+import Toolbar from './components/Toolbar';
 
 const App = () => {
   
   return (
     <div style={{ maxWidth: 600, margin: "auto" }}>      
       <ToastContainer />   
+      <Toolbar />
       <Switch>        
         <Route path="/auth/register" exect component={RegisterPage} />
         <Route path="/auth/login" exect component={LoginPage} />
