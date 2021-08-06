@@ -1,6 +1,6 @@
 const { Router } = require("express");
 const imageRouter = Router();
-const Image = require("../models/Images");
+const Image = require("../models/Image");
 const { upload } = require("../middleware/imageUpload");
 
 imageRouter.post('/', upload.single("image"), async (req, res) => {
@@ -26,7 +26,7 @@ imageRouter.post('/', upload.single("image"), async (req, res) => {
 
 imageRouter.get("/", async (req, res) => {
   //public 이미지들만 제공
-  const images = await Image.find();
+  const images = await Image.find({ public: true });
   res.json(images);
 });
 
