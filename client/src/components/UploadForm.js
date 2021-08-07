@@ -8,15 +8,16 @@ import { ImageContext } from '../context/ImageContext';
 const UploadForm = () => {
   const {images, setImages, myImages, setMyImages } = useContext(ImageContext);
   const defaultFileName = "이미지 파일을 업로드 해주세요."
-  const [file, setFile] = useState(null);
+  const [files, setFiles] = useState(null);
   const [imgSrc, setImgSrc] = useState(null);
   const [fileName, setFileName] = useState(defaultFileName);
   const [percent, setPercent] = useState(0);
   const [isPublic, setIsPublic] = useState(true);
 
   const imageSelectHandler = (e) => {
-    const imageFile = e.target.files[0];
-    setFile(imageFile);
+    const imageFiles = e.target.files;
+    setFiles(imageFiles);
+    const imageFile = imageFiles[0];
     setFileName(imageFile.name);
     const fileReader = new FileReader();
     fileReader.readAsDataURL(imageFile);
@@ -27,7 +28,9 @@ const UploadForm = () => {
     e.preventDefault();
     const formData = new FormData();
 
-    formData.append("image", file);
+    for(let file of files) {
+      formData.append("image", file);
+    }    
     formData.append("public", isPublic);
     try {
       const res = await axios.post("/images", formData, {
@@ -36,8 +39,8 @@ const UploadForm = () => {
           setPercent(Math.round(100 *  e.loaded/e.total));
         }
       });      
-      if(isPublic) setImages([...images, res.data]);
-      else setMyImages([...myImages, res.data])
+      if(isPublic) setImages([...images, ...res.data]);
+      else setMyImages([...myImages, ...res.data])
 
       toast.success("이미지 업로드 성공!!!")
       setTimeout(() => {
@@ -60,7 +63,13 @@ const UploadForm = () => {
       <ProgressBar percent={percent}/>
       <div className="file-dropper">
         {fileName}
-        <input id="image" type="file" accept="image/jpg" onChange={imageSelectHandler}/>              
+        <input 
+          id="image" 
+          type="file"
+          multiple
+          accept="image/jpg" 
+          onChange={imageSelectHandler}
+        />
       </div>      
       <input 
         type="checkbox" 
