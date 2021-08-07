@@ -7,11 +7,11 @@ export const AuthProvider = ({children}) => {
   const [me, setMe] = useState()
 
   useEffect(() => {
-    const sessionId = localStorage.getItem("sessionId");    
-    if(me) {      
+    const sessionId = localStorage.getItem("sessionId");        
+    if(me) {            
       axios.defaults.headers.common.sessionid = me.sessionId;
       localStorage.setItem("sessionId", me.sessionId);
-    }else if(sessionId){            
+    }else if(sessionId){                  
       axios.get("/users/me", {headers: { sessionid: sessionId }})
         .then(result => 
           setMe({
@@ -26,6 +26,7 @@ export const AuthProvider = ({children}) => {
         });
     }
     else {      
+      console.log("authcontext 44444 ")
       delete axios.defaults.headers.common.sessionid;
     }
   }, [me])

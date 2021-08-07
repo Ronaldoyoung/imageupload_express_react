@@ -5,13 +5,14 @@ import axios from "axios";
 import { toast } from 'react-toastify';
 
 const Toolbar = () => {
-  const [me, ] = useContext(AuthContext);
+  const [me, setMe] = useContext(AuthContext);
 
   const logoutHandler = async () => {
     try {
       console.log({me})
       await axios.patch(
         "/users/logout");
+      setMe();
       toast.success("로그아웃!!");
     } catch (err) {
       console.error(err);

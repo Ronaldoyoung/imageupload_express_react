@@ -13,15 +13,17 @@ const LoginPage = () => {
 
   const loginHandler = async (e) => {
     try {
-      e.preventDefault();
-      const result = await axios.patch("/users/login", {username, password});
+      e.preventDefault();      
+      const result = await axios.patch("/users/login", {username, password});      
       if(username.length < 3 || password.length < 6) 
         throw new Error("입력 하신 정보가 올바르지 않습니다.")
+      
       setMe({
         name: result.data.name, 
         sessionId: result.data.sessionId, 
         userId: result.data.userId
       });
+      
       history.push("/");
       toast.success("로그인 성공!");
     } catch (err) {      

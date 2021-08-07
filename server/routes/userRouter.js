@@ -32,6 +32,9 @@ userRouter.patch("/login", async (req, res) => {
     user.sessions.push({ createdAt: new Date() });
     const session = user.sessions[user.sessions.length - 1];
     await user.save();
+
+    console.log("sessionId ~~~~~", session._id);
+
     res.json({ 
       message: "user logged", 
       sessionId: session._id, 
@@ -83,7 +86,7 @@ userRouter.get("/me/images", async (req, res) => {
   try{
     if(!req.user) throw new Error("권한이 없습니다.");
     const images = await Image.find({ "user._id": req.user.id });
-    res.json({ images })
+    res.json(images)
   }catch(err) {
     console.log(err);
     res.status(400).json({ message: err.message });
