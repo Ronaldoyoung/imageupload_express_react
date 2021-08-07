@@ -4,6 +4,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import MainPage from "./pages/MainPage";
 import RegisterPage from './pages/RegisterPage';
 import LoginPage from "./pages/LoginPage";
+import ImagePage from "./pages/ImagePage";
 import { Switch, Route } from "react-router-dom";
 import Toolbar from './components/Toolbar';
 
@@ -14,6 +15,7 @@ const App = () => {
       <ToastContainer />   
       <Toolbar />
       <Switch>        
+        <Route path="/images/:imageId" exect component={ImagePage} />
         <Route path="/auth/register" exect component={RegisterPage} />
         <Route path="/auth/login" exect component={LoginPage} />
         <Route path="/" component={MainPage}/>
