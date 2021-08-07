@@ -6,7 +6,7 @@ import ProgressBar from './ProgressBar';
 import { ImageContext } from '../context/ImageContext';
 
 const UploadForm = () => {
-  const [images, setImages] = useContext(ImageContext);
+  const {images, setImages, myImages, setMyImages } = useContext(ImageContext);
   const defaultFileName = "이미지 파일을 업로드 해주세요."
   const [file, setFile] = useState(null);
   const [imgSrc, setImgSrc] = useState(null);
@@ -50,9 +50,7 @@ const UploadForm = () => {
       setImgSrc(null);
       console.log(error)
     }
-  }
-
-  console.log({ isPublic })
+  }  
 
   return (
     <form onSubmit={onSubmit}>      
