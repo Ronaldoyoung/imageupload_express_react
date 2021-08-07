@@ -1,12 +1,12 @@
-import React, { useEffect, useState, useContext } from "react";
-import axios from "axios";
+import React, { useContext } from "react";
 import {ImageContext} from '../context/ImageContext'
 
 const ImageList = () => {  
   const [images] = useContext(ImageContext);
 
   const imgList = images.map(image => (
-    <img 
+    <img
+      alt="" 
       key={image.key}
       style={{width: "100%"}} src={`http://localhost:5000/uploads/${image.key}`} 
     />

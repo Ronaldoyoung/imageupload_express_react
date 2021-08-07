@@ -11,7 +11,8 @@ const UploadForm = () => {
   const [file, setFile] = useState(null);
   const [imgSrc, setImgSrc] = useState(null);
   const [fileName, setFileName] = useState(defaultFileName);
-  const [percent, setPercent] = useState(0)
+  const [percent, setPercent] = useState(0);
+  const [isPublic, setIsPublic] = useState(true);
 
   const imageSelectHandler = (e) => {
     const imageFile = e.target.files[0];
@@ -27,15 +28,14 @@ const UploadForm = () => {
     const formData = new FormData();
 
     formData.append("image", file);
-
+    formData.append("public", isPublic);
     try {
       const res = await axios.post("/images", formData, {
         headers: { "Content-Type": "multipart/form-data"},
         onUploadProgress: (e) => {
           setPercent(Math.round(100 *  e.loaded/e.total));
         }
-      });
-      console.log("res : ~~~ ", res);
+      });      
       setImages([...images, res.data]);
       toast.success("이미지 업로드 성공!!!")
       setTimeout(() => {
@@ -44,7 +44,7 @@ const UploadForm = () => {
         setImgSrc(null);
       }, 3000);      
     } catch (error) {
-      toast.error(error.message);
+      toast.error(error.response.data.message);
       setPercent(0);
       setFileName(defaultFileName);
       setImgSrc(null);
@@ -52,14 +52,23 @@ const UploadForm = () => {
     }
   }
 
+  console.log({ isPublic })
+
   return (
     <form onSubmit={onSubmit}>      
-      <img src={imgSrc} className={`image-preview ${imgSrc && "image-preview-show"}`} />
+      <img alt="" src={imgSrc} className={`image-preview ${imgSrc && "image-preview-show"}`} />
       <ProgressBar percent={percent}/>
       <div className="file-dropper">
         {fileName}
-        <input id="image" type="file" accept="image/jpg" onChange={imageSelectHandler}/>      
+        <input id="image" type="file" accept="image/jpg" onChange={imageSelectHandler}/>              
       </div>      
+      <input 
+        type="checkbox" 
+        id="public-check" 
+        value={!isPublic} 
+        onChange={() => setIsPublic(!isPublic)}
+      />
+      <label htmlFor="public-check">비공개</label>
       <button type="submit" style={{ width: "100%", height: 40, borderRadius: "3px", cursor: "pointer" }}>제출</button>
     </form>
   )

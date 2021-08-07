@@ -59,7 +59,7 @@ imageRouter.patch("/:imageId/like", async (req, res) => {
     if(!mongoose.isValidObjectId(req.params.imageId)) throw new Error("올바르지 않는 imageId입니다.");
     const image = await Image.findOneAndUpdate(
       {_id: req.params.imageId },
-      { $addToSet: { likes: req.user.id} },
+      { $addToSet: { likes: req.user.id }},
       { new: true }
     );
     res.json(image);

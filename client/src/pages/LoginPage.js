@@ -8,7 +8,7 @@ import { useHistory } from "react-router-dom";
 const LoginPage = () => {
   const [username, setUsername] = useState("");
   const [password ,setPassword] = useState("");
-  const [_, setMe] = useContext(AuthContext);
+  const [, setMe] = useContext(AuthContext);
   const history = useHistory();
 
   const loginHandler = async (e) => {
