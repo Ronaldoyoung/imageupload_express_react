@@ -31,9 +31,7 @@ userRouter.patch("/login", async (req, res) => {
     if (!isValid) throw new Error("입력하신 정보가 올바르지 않습니다.");
     user.sessions.push({ createdAt: new Date() });
     const session = user.sessions[user.sessions.length - 1];
-    await user.save();
-
-    console.log("sessionId ~~~~~", session._id);
+    await user.save();    
 
     res.json({ 
       message: "user logged", 

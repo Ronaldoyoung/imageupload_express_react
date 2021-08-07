@@ -13,7 +13,7 @@ export const ImageProvider = (prop) => {
 
   useEffect(() => {
     axios
-    .get("/images")
+    .get("/images?page=2")
     .then(result => setImages(result.data))
     .catch((err) => console.log(err))    
   }, []);
