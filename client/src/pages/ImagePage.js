@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useRef } from "react";
 import { useParams } from 'react-router'
 import { ImageContext } from '../context/ImageContext';
 import { AuthContext } from "../context/AuthContext";
@@ -9,16 +9,42 @@ import { useHistory } from 'react-router-dom';
 const ImagePage = () => {
   const history = useHistory();
   const { imageId } = useParams();
-  const { images, setImages, setMyImages } = useContext(ImageContext);
-  const image = images.find(image => image._id === imageId);    
+  const { images, setImages, setMyImages } = useContext(ImageContext);  
   const [hasLiked, setHasLiked] = useState(false);
   const [me] = useContext(AuthContext);
+  const [image, setImage] = useState();
+  const imageRef = useRef();
+  const [error, setError] = useState(false);
+
+  useEffect(() => {
+    imageRef.current = images.find(image => image._id === imageId);    
+  }, [images, imageId])
+
+  useEffect(() => {
+    if(imageRef.current){ //배열에 이미지가 존재할 때
+      setImage(imageRef.current);
+    }
+    else { //배열에 이미지가 존재하지 않으면 무조건 서버 호출
+      axios.get(`/images/${imageId}`)
+        .then(({ data }) => {
+          setError(false);
+          setImage(data);
+        })
+        .catch((err) => {
+          setError(true);
+          toast.error(err.response.data.message)
+        })
+    }    
+  }, [imageId]);
 
   useEffect(() => {
     if(me && image && image.likes.includes(me.userId)) {
       setHasLiked(true);
     }
   },[me, image]);
+
+  if(error) return <h3>Error..</h3>
+  else if(!image) return <h2>Loading...</h2>
 
   const updateImage = (images, image) => [
     ...images.filter(image => image._id !== imageId), 
@@ -34,7 +60,7 @@ const ImagePage = () => {
     setHasLiked(!hasLiked);    
   }
 
-  const deleteImage = (images) => images.filter(image => image._id !== imageId)
+  // const deleteImage = (images) => images.filter(image => image._id !== imageId)
 
   const deleteHandler = async () => {
     try{
@@ -47,9 +73,7 @@ const ImagePage = () => {
     }catch(err) {
       toast.error(err.message);
     }    
-  }
-
-  if(!image) return <h2>Loading...</h2>
+  }  
 
   return (
     <div>
