@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useRef } from 'react';
 import axios from 'axios';
 import "./UploadForm.css";
 import { toast } from 'react-toastify';
@@ -11,6 +11,7 @@ const UploadForm = () => {
   const [previews, setPreviews] = useState([]);
   const [percent, setPercent] = useState(0);
   const [isPublic, setIsPublic] = useState(true);
+  const inputRef = useRef()
 
   const imageSelectHandler = async (e) => {
     const imageFiles = e.target.files;
@@ -50,7 +51,6 @@ const UploadForm = () => {
           setPercent(Math.round(100 *  e.loaded/e.total));
         }
       });      
-
       if(isPublic) setImages((prevData) => [...res.data, ...prevData ]);      
       setMyImages((prevData) => [...res.data, ...prevData ]);      
 
@@ -59,6 +59,7 @@ const UploadForm = () => {
       setTimeout(() => {
         setPercent(0);        
         setPreviews([])
+        inputRef.current.value = null;
       }, 3000);      
     } catch (error) {
       toast.error(error.response.data.message);
@@ -99,6 +100,7 @@ const UploadForm = () => {
         />
       </div>      
       <input 
+        ref={(ref) => {inputRef.current = ref}}
         type="checkbox" 
         id="public-check" 
         value={!isPublic} 
