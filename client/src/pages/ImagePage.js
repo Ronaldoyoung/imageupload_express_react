@@ -81,7 +81,7 @@ const ImagePage = () => {
       <h3>Image Page - {imageId} </h3>
       <img
         style={{ width: "100%"}} 
-        alt={imageId} src={`http://localhost:5000/uploads/${image.key}`}
+        alt={imageId} src={`https://image-upload-test-4ir.s3.ap-northeast-2.amazonaws.com/raw/${image.key}`}
       />
       <span>좋아요 {image.likes.length}</span>
       {me && image.user._id === me.userId && ( 
