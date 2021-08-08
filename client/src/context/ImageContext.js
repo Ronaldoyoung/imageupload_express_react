@@ -12,7 +12,7 @@ export const ImageProvider = (prop) => {
   const [imageLoading, setImageLoading] = useState(false);
   const [imageError, setImageError] = useState(false);
   const [me] = useContext(AuthContext);
-  const pastImageUrlRef = useRef()
+  const pastImageUrlRef = useRef();
 
   useEffect(() => {
     if(pastImageUrlRef.current === imageUrl) return;
@@ -51,7 +51,8 @@ export const ImageProvider = (prop) => {
 
   return <ImageContext.Provider value={{
     images: isPublic ? images : myImages, 
-    setImages: isPublic ? setImages: setMyImages,     
+    setImages,
+    setMyImages,
     isPublic,
     setIsPublic,
     setImageUrl,    
