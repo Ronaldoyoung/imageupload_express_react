@@ -10,7 +10,7 @@ const fileUnlink = promisify(fs.unlink);
 
 imageRouter.post('/', upload.array("image", 5), async (req, res) => {  
   try {
-    if(!req.user) throw new Error("권한이 없습니다.");
+    if(!req.user) throw new Error("권한이 없습니다.");    
     
     const images = await Promise.all(
       req.files.map(async file => {
@@ -21,7 +21,7 @@ imageRouter.post('/', upload.array("image", 5), async (req, res) => {
             username: req.user.username
           },
           public: req.body.public,
-          key: file.filename, 
+          key: file.key.replace("raw/", ""),
           originalFileName: file.originalname 
         }).save();
         return image;
