@@ -36,6 +36,42 @@ const UploadForm = () => {
     setPreviews(imagePreviews);
   }  
 
+
+  const onSubmitV2 = async (e) => {
+    e.preventDefault();
+    try {
+      const presignedData = await axios.post("/images/presigned", {
+        contentTypes: [...files].map(file => file.type)
+      })
+
+      console.log({ presignedData });  
+
+      const result = await Promise.all([...files].map((file, index) => {
+        const { presigned } = presignedData.data[index];
+        const formData = new FormData();
+        for(const key in presigned.fields) {
+          formData.append(key, presigned.fields[key]);
+        }
+        formData.append("file",file);
+        return axios.post(presigned.result, formData);
+      }));
+
+      console.log({ result });
+
+      toast.success("이미지 업로드 성공!!!");
+      setTimeout(() => {
+        setPercent(0);        
+        setPreviews([])
+        inputRef.current.value = null;
+      }, 3000);      
+    }catch (err) {
+      toast.error(err.response.data.message);
+      setPercent(0);      
+      setPreviews([])
+      console.log(err)
+    }
+  }
+
   const onSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData();
@@ -84,7 +120,7 @@ const UploadForm = () => {
     : previews.reduce((previous, current) => previous + `${current.fileName},`, "");
 
   return (
-    <form onSubmit={onSubmit}>      
+    <form onSubmit={onSubmitV2}>      
       <div style={{display:"flex", flexWrap:"wrap"}}>
         {previewImages}
       </div>      

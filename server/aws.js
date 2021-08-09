@@ -8,11 +8,11 @@ const s3 = new aws.S3({
 
 // getSignedUrl({key}).then(result => console.log(result)).catch(err => console.log(err));
 
-try {
-  const data = await getSignedUrl({ key })
-} catch(err) {
-  console.log(err)
-}
+// try {
+//   const data = await getSignedUrl({ key })
+// } catch(err) {
+//   console.log(err)
+// }
 
 const getSignedUrl = ({key}) => {
   return new Promise((resolve, reject) => {
