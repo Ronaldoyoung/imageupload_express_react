@@ -52,8 +52,9 @@ const UploadForm = () => {
         for(const key in presigned.fields) {
           formData.append(key, presigned.fields[key]);
         }
-        formData.append("file",file);
-        return axios.post(presigned.result, formData);
+        formData.append("Content-Type", file.type);
+        formData.append("file",file);        
+        return axios.post(presigned.url, formData);
       }));
 
       console.log({ result });
