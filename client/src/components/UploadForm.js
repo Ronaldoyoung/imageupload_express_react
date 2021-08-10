@@ -9,7 +9,7 @@ const UploadForm = () => {
   const { setImages, setMyImages } = useContext(ImageContext);  
   const [files, setFiles] = useState(null);  
   const [previews, setPreviews] = useState([]);
-  const [percent, setPercent] = useState(0);
+  const [percent, setPercent] = useState([]);
   const [isPublic, setIsPublic] = useState(true);
   const inputRef = useRef()
 
@@ -54,12 +54,20 @@ const UploadForm = () => {
         }
         formData.append("Content-Type", file.type);
         formData.append("file",file);        
-        return axios.post(presigned.url, formData);
+        return axios.post(presigned.url, formData, {
+          onUploadProgress: (e) => {
+            setPercent(prevData => {
+              const newData = [...prevData];
+              newData[index] = Math.round(100 *  e.loaded/e.total);
+              return newData;
+            });            
+          }
+        });
       }));
 
       const res = await axios.post("/images", { images: [...files].map((file, index) => ({
           imageKey: presignedData.data[index].imageKey,
-          originalname: file.originalname,
+          originalname: file.name,
         })), 
         public: isPublic, 
       });
@@ -108,20 +116,22 @@ const UploadForm = () => {
       }, 3000);      
     } catch (error) {
       toast.error(error.response.data.message);
-      setPercent(0);      
+      setPercent([]);      
       setPreviews([])
       console.log(error)
     }
   }  
 
   const previewImages = previews.map((preview, index) => 
-    <img
-      style={{width: 200, height: 200, objectFit:"cover"}}            
-      key={index}
-      alt=""
-      src={preview.imgSrc}     
-      className={`image-preview ${preview.imgSrc && "image-preview-show"}`}
-    />
+    <div key={index}>
+      <img
+        style={{width: 200, height: 200, objectFit:"cover"}}                    
+        alt=""
+        src={preview.imgSrc}     
+        className={`image-preview ${preview.imgSrc && "image-preview-show"}`}
+      />
+      <ProgressBar percent={percent[index]}/>
+    </div>    
   );
 
   const fileName = previews.length === 0 
@@ -130,10 +140,9 @@ const UploadForm = () => {
 
   return (
     <form onSubmit={onSubmitV2}>      
-      <div style={{display:"flex", flexWrap:"wrap"}}>
+      <div style={{display:"flex", flexWrap:"wrap", justifyContent:"space-around"}}>
         {previewImages}
-      </div>      
-      <ProgressBar percent={percent}/>
+      </div>            
       <div className="file-dropper">
         {fileName}
         <input 
