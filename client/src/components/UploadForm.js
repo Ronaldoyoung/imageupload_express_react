@@ -46,7 +46,7 @@ const UploadForm = () => {
 
       console.log({ presignedData });  
 
-      const result = await Promise.all([...files].map((file, index) => {
+      await Promise.all([...files].map((file, index) => {
         const { presigned } = presignedData.data[index];
         const formData = new FormData();
         for(const key in presigned.fields) {
@@ -57,7 +57,15 @@ const UploadForm = () => {
         return axios.post(presigned.url, formData);
       }));
 
-      console.log({ result });
+      const res = await axios.post("/images", { images: [...files].map((file, index) => ({
+          imageKey: presignedData.data[index].imageKey,
+          originalname: file.originalname,
+        })), 
+        public: isPublic, 
+      });
+
+      if(isPublic) setImages((prevData) => [...res.data, ...prevData ]);
+      setMyImages((prevData) => [...res.data, ...prevData ]);
 
       toast.success("이미지 업로드 성공!!!");
       setTimeout(() => {
