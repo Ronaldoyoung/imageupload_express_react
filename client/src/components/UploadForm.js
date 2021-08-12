@@ -107,7 +107,7 @@ const UploadForm = () => {
       if(isPublic) setImages((prevData) => [...res.data, ...prevData ]);      
       setMyImages((prevData) => [...res.data, ...prevData ]);      
 
-      toast.success("이미지 업로드 성공!!!!!!");
+      toast.success("이미지 업로드 성공!!!!!!~~~");
 
       setTimeout(() => {
         setPercent(0);        
