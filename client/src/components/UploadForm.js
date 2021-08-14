@@ -6,7 +6,7 @@ import ProgressBar from './ProgressBar';
 import { ImageContext } from '../context/ImageContext';
 
 const UploadForm = () => {
-  const { setImages, setMyImages } = useContext(ImageContext);  
+  const { setImages, setMyImages } = useContext(ImageContext);
   const [files, setFiles] = useState(null);  
   const [previews, setPreviews] = useState([]);
   const [percent, setPercent] = useState([]);
@@ -77,7 +77,7 @@ const UploadForm = () => {
 
       toast.success("이미지 업로드 성공!!!");
       setTimeout(() => {
-        setPercent(0);        
+        setPercent([]);        
         setPreviews([])
         inputRef.current.value = null;
       }, 3000);      
@@ -89,38 +89,38 @@ const UploadForm = () => {
     }
   }
 
-  const onSubmit = async (e) => {
-    e.preventDefault();
-    const formData = new FormData();
+  // const onSubmit = async (e) => {
+  //   e.preventDefault();
+  //   const formData = new FormData();
 
-    for(let file of files) {
-      formData.append("image", file);
-    }    
-    formData.append("public", isPublic);
-    try {
-      const res = await axios.post("/images", formData, {
-        headers: { "Content-Type": "multipart/form-data"},
-        onUploadProgress: (e) => {
-          setPercent(Math.round(100 *  e.loaded/e.total));
-        }
-      });      
-      if(isPublic) setImages((prevData) => [...res.data, ...prevData ]);      
-      setMyImages((prevData) => [...res.data, ...prevData ]);      
+  //   for(let file of files) {
+  //     formData.append("image", file);
+  //   }    
+  //   formData.append("public", isPublic);
+  //   try {
+  //     const res = await axios.post("/images", formData, {
+  //       headers: { "Content-Type": "multipart/form-data"},
+  //       onUploadProgress: (e) => {
+  //         setPercent(Math.round(100 *  e.loaded/e.total));
+  //       }
+  //     });      
+  //     if(isPublic) setImages((prevData) => [...res.data, ...prevData ]);      
+  //     setMyImages((prevData) => [...res.data, ...prevData ]);      
 
-      toast.success("이미지 업로드 성공!!!!!!~~~");
+  //     toast.success("이미지 업로드 성공");
 
-      setTimeout(() => {
-        setPercent(0);        
-        setPreviews([])
-        inputRef.current.value = null;
-      }, 3000);      
-    } catch (error) {
-      toast.error(error.response.data.message);
-      setPercent([]);      
-      setPreviews([])
-      console.log(error)
-    }
-  }  
+  //     setTimeout(() => {
+  //       setPercent(0);        
+  //       setPreviews([]);
+  //       inputRef.current.value = null;
+  //     }, 3000);
+  //   } catch (error) {
+  //     toast.error(error.response.data.message);
+  //     setPercent([]);
+  //     setPreviews([]);
+  //     console.log(error);
+  //   }
+  // }  
 
   const previewImages = previews.map((preview, index) => 
     <div key={index}>
