@@ -40,7 +40,7 @@ const ImageList = () => {
       to={`/images/${image._id}`} 
       ref={index+3 === images.length ? elementRef : undefined}
     >
-      <Image imageUrl={`https://image-upload-test-4ir.s3.ap-northeast-2.amazonaws.com/w140/${image.key}`} />      
+      <Image imageUrl={`http://daocsgp4z8b0o.cloudfront.net/w140/${image.key}`} />      
     </Link>    
   ));
 
